@@ -8,20 +8,20 @@ module.exports = {
     pages: [
         {
             nickname: "blog",
-            url: "https://kevinshu1995.github.io/blog/",
+            url: "https://hsiu.soy",
             title: "部落格 - 前端路上",
             description: "紀錄與程式、前端相關的筆記，及生活故事的簡單紀錄。",
         },
         {
             nickname: "jsDungeon",
-            url: "https://kevinshu1995.github.io/hex_jsDungeon/",
+            url: "https://wen-hsiu-hsu.github.io/hex_jsDungeon/",
             title: "作品集散地 - JS地下城",
             description:
                 "集合幾個 JavaScript 的小專案，未來將整合所有程式相關作品。",
         },
         {
             nickname: "maskMap",
-            url: "https://kevinshu1995.github.io/maskmap/",
+            url: "https://wen-hsiu-hsu.github.io/maskmap/",
             title: "口罩地圖",
             description:
                 "因應 2020 年新冠肺炎&剛學 JS，所以寫了這個網站當作練習。",
@@ -39,7 +39,7 @@ module.exports = {
                 },
                 {
                     name: "Source code",
-                    url: "https://github.com/kevinshu1995/react-tailwind-sign-up-form",
+                    url: "https://github.com/wen-hsiu-hsu/react-tailwind-sign-up-form",
                 },
             ],
         },

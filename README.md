@@ -10,14 +10,14 @@
 
 ## ✨ 功能特色
 
-- 🎨 **響應式設計** - 完美支援桌面、平板和手機裝置
-- 🌍 **雙語支援** - 提供繁體中文和英文兩種語言
-- 🎬 **動態動畫** - 使用 Anime.js 實現流暢的滾動動畫效果
-- 📄 **PDF 下載** - 支援將履歷匯出為 PDF 格式
-- 🔍 **SEO 優化** - 完整的 SEO 設定，包含 sitemap、schema.org 和 og-image
-- 📊 **資料動態載入** - 從 GitHub Gist 動態讀取履歷資料
-- 📈 **Google Analytics** - 整合流量分析功能
-- 🎯 **導航指示器** - 側邊欄顯示當前瀏覽章節
+-   🎨 **響應式設計** - 完美支援桌面、平板和手機裝置
+-   🌍 **雙語支援** - 提供繁體中文和英文兩種語言
+-   🎬 **動態動畫** - 使用 Anime.js 實現流暢的滾動動畫效果
+-   📄 **PDF 下載** - 支援將履歷匯出為 PDF 格式
+-   🔍 **SEO 優化** - 完整的 SEO 設定，包含 sitemap、schema.org 和 og-image
+-   📊 **資料動態載入** - 從 GitHub Gist 動態讀取履歷資料
+-   📈 **Google Analytics** - 整合流量分析功能
+-   🎯 **導航指示器** - 側邊欄顯示當前瀏覽章節
 
 ## 🛠️ 技術棧
 
@@ -65,8 +65,8 @@
 
 ```bash
 # 克隆專案
-git clone https://github.com/kevinshu1995/kevinshu1995.github.io.git
-cd kevinshu1995.github.io
+git clone https://github.com/wen-hsiu-hsu/resume.git
+cd resume
 
 # 安裝依賴（選擇其中一個）
 npm install
@@ -123,7 +123,7 @@ bun run preview
 ## 📁 專案結構
 
 ```
-kevinshu1995.github.io/
+resume/
 ├── assets/              # 全域樣式檔案
 ├── components/          # Vue 組件
 │   ├── base/           # 基礎共用組件
@@ -192,7 +192,7 @@ Prettier 設定詳見 `.prettierrc.yaml`。
 ## 📮 聯絡方式
 
 -   **Email**: kevin.hsu.hws@gmail.com
--   **GitHub**: [@kevinshu1995](https://github.com/kevinshu1995)
+-   **GitHub**: [@wen-hsiu-hsu](https://github.com/wen-hsiu-hsu)
 -   **Threads**: [@hsiu.soy](https://www.threads.net/@hsiu.soy)
 -   **Website**: [https://resume.hsiu.soy](https://resume.hsiu.soy)
 

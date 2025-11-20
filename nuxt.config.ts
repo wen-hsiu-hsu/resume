@@ -57,7 +57,7 @@ export default defineNuxtConfig({
             url: "resume.hsiu.soy",
             sameAs: [
                 "https://www.threads.net/@hsiu.soy",
-                "https://github.com/kevinshu1995",
+                "https://github.com/wen-hsiu-hsu",
             ],
         }),
     },
