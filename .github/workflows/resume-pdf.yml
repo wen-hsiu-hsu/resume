@@ -21,12 +21,13 @@ jobs:
         steps:
             - uses: actions/checkout@v4
 
+            # GITHUB_TOKEN 是 GitHub App 的 token，不能存取 gists API（會回 403），
+            # 而這個 gist 知道 ID 就能讀，所以直接不帶認證呼叫
             - name: Check gist version
               id: gist
-              env:
-                  GH_TOKEN: ${{ github.token }}
               run: |
-                  version=$(gh api "gists/$GIST_ID" --jq '.history[0].version')
+                  set -o pipefail
+                  version=$(curl -fsSL --retry 3 "https://api.github.com/gists/$GIST_ID" | jq -r '.history[0].version')
                   echo "version=$version" >> "$GITHUB_OUTPUT"
                   if [ "$version" = "$(cat "$VERSION_FILE" 2>/dev/null)" ] && [ "${{ github.event_name }}" != "workflow_dispatch" ]; then
                       echo "changed=false" >> "$GITHUB_OUTPUT"
