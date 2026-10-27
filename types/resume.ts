@@ -2,6 +2,7 @@ export interface Profile {
     network: string
     username: string
     url: string
+    hidden?: boolean
 }
 
 export interface Location {

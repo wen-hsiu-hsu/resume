@@ -1,0 +1,66 @@
+name: Resume PDF
+
+# Gist 沒有 webhook，所以每天檢查一次版本，有更新才重新產生 PDF 並 commit，
+# push 之後由 Vercel 自動部署
+on:
+    schedule:
+        - cron: "0 18 * * *" # 台灣時間 02:00
+    workflow_dispatch:
+
+permissions:
+    contents: write
+
+env:
+    GIST_ID: b5a572372312fe91f0f36721e9d15007 # 與 nuxt.config.ts 的 gistId 相同
+    VERSION_FILE: .github/resume-pdf-gist-version
+
+jobs:
+    generate:
+        runs-on: ubuntu-latest
+        timeout-minutes: 15
+        steps:
+            - uses: actions/checkout@v4
+
+            - name: Check gist version
+              id: gist
+              env:
+                  GH_TOKEN: ${{ github.token }}
+              run: |
+                  version=$(gh api "gists/$GIST_ID" --jq '.history[0].version')
+                  echo "version=$version" >> "$GITHUB_OUTPUT"
+                  if [ "$version" = "$(cat "$VERSION_FILE" 2>/dev/null)" ] && [ "${{ github.event_name }}" != "workflow_dispatch" ]; then
+                      echo "changed=false" >> "$GITHUB_OUTPUT"
+                  else
+                      echo "changed=true" >> "$GITHUB_OUTPUT"
+                  fi
+
+            - uses: actions/setup-node@v4
+              if: steps.gist.outputs.changed == 'true'
+              with:
+                  node-version-file: .tool-versions
+                  cache: npm
+
+            - name: Build
+              if: steps.gist.outputs.changed == 'true'
+              run: |
+                  npm ci
+                  npm run build
+
+            - name: Generate PDF
+              if: steps.gist.outputs.changed == 'true'
+              env:
+                  CHROME_PATH: /usr/bin/google-chrome
+              run: |
+                  node .output/server/index.mjs &
+                  npx --yes wait-on@8 --timeout 60000 http://localhost:3000/resume
+                  node scripts/generate-pdf.mjs
+
+            - name: Commit
+              if: steps.gist.outputs.changed == 'true'
+              run: |
+                  echo "${{ steps.gist.outputs.version }}" > "$VERSION_FILE"
+                  git config user.name "github-actions[bot]"
+                  git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+                  git add public/resume-*.pdf "$VERSION_FILE"
+                  git diff --cached --quiet || git commit -m "chore: 更新履歷 PDF"
+                  git push

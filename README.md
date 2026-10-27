@@ -21,7 +21,7 @@
 -   履歷資料放在 GitHub Gist，網站執行時讀取
 -   中英雙語用 @nuxtjs/i18n
 -   捲動動畫用 Anime.js
--   PDF 下載用 html-to-image 和 jsPDF 產生
+-   PDF 由 GitHub Actions 用 headless Chrome 預先產生，文字可以選取
 -   SEO 有 sitemap、Schema.org 結構化資料和 Open Graph 圖片
 
 開發與設定說明見 [docs/development.md](docs/development.md)。

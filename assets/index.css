@@ -2,3 +2,14 @@ html,
 body {
     font-family: "Noto Serif TC", serif;
 }
+
+@page {
+    size: A4;
+    margin: 15mm;
+}
+
+@media print {
+    html {
+        zoom: 0.8;
+    }
+}

@@ -1,6 +1,6 @@
 <template>
-    <div class="max-w-[1024px] container mx-auto pb-10 pt-4 px-4">
-        <div class="mb-16">
+    <div class="max-w-[1024px] container mx-auto pb-10 pt-4 px-4 print:p-0">
+        <div class="mb-16 print:hidden">
             <div class="border-b border-neutral-200 pb-2">
                 <div class="flex items-center gap-8 w-full relative">
                     <NuxtLink
@@ -39,28 +39,29 @@
                     </ul>
                 </div>
             </div>
-            <div class="hidden mt-6">
-                <button
-                    class="ml-auto flex gap-1 items-center"
-                    @click="onClickDownloadPdf"
+            <div class="mt-6 flex justify-end">
+                <a
+                    class="flex gap-1 items-center hover:underline"
+                    :href="`/resume-${locale}.pdf`"
+                    download
                 >
                     <span>{{ $t("resume.downloadPdf") }}</span>
-                    <Icon
-                        name="mdi:arrow-top-right"
-                        class="size-3"
-                        mode="svg"
-                    />
-                </button>
+                    <Icon name="mdi:download" class="size-3" mode="svg" />
+                </a>
             </div>
         </div>
-        <div class="flex flex-col md:flex-row gap-16" v-if="resume" ref="print">
-            <div class="md:w-[200px] space-y-8 shrink-0">
+        <div
+            class="flex flex-col md:flex-row print:flex-row gap-12"
+            :class="[locale === 'en' && 'print:text-3.5']"
+            v-if="resume"
+        >
+            <div class="md:w-[200px] print:w-[200px] space-y-8 shrink-0">
                 <div class="space-y-2">
-                    <img
+                    <!-- <img
                         src="/avatar.jpg"
                         :alt="`${nameTw} ${nameEn}`"
                         class="max-w-30 rounded"
-                    />
+                    /> -->
                     <div class="space-y-0">
                         <h2 class="font-bold text-5">
                             {{ resume.basics.name }}
@@ -98,7 +99,9 @@
                             </a>
                         </li>
                         <li
-                            v-for="profile in resume.basics.profiles"
+                            v-for="profile in resume.basics.profiles.filter(
+                                (item) => !item.hidden,
+                            )"
                             :key="profile.network"
                         >
                             <a
@@ -133,7 +136,7 @@
                         </h2>
 
                         <template v-if="section.key === 'stack'">
-                            <ul class="space-y-2 list-none">
+                            <ul class="space-y-3 list-none">
                                 <li
                                     v-for="item in resume.skills"
                                     :key="item.name"
@@ -186,24 +189,32 @@
                                     <h3 class="font-bold text-3.5">
                                         {{ item.institution }}
                                     </h3>
-                                    <div class="flex gap-2 text-3.5">
-                                        <p>{{ item.area }}</p>
-                                        <p>{{ item.studyType }}</p>
+                                    <div
+                                        class="flex flex-wrap gap-x-2 text-3 font-italic"
+                                    >
+                                        <p class="text-nowrap">
+                                            {{ item.area }}
+                                        </p>
+                                        <p class="text-nowrap">
+                                            {{ item.studyType }}
+                                        </p>
                                     </div>
                                 </li>
                             </ul>
                         </template>
 
                         <template v-if="section.key === 'languages'">
-                            <ul class="list-none">
+                            <ul class="list-none space-y-1">
                                 <li
                                     v-for="item in resume.languages"
-                                    class="flex gap-2 flex-wrap text-3.5"
+                                    class="flex flex-col flex-wrap text-3.5"
                                 >
                                     <h3 class="font-bold">
                                         {{ item.language }}
                                     </h3>
-                                    <p>{{ item.fluency }}</p>
+                                    <p class="text-3 font-italic text-nowrap">
+                                        {{ item.fluency }}
+                                    </p>
                                 </li>
                             </ul>
                         </template>
@@ -211,10 +222,10 @@
                 </ul>
             </div>
             <div class="grow">
-                <div class="space-y-8">
+                <div class="space-y-6">
                     <div
                         :class="[
-                            'space-y-4',
+                            'space-y-2',
                             locale === 'zh_tw' && 'tracking-wider',
                         ]"
                         v-for="section in sections"
@@ -222,7 +233,7 @@
                     >
                         <h2
                             :class="[
-                                'text-5 font-bold border-b border-neutral-200 pb-0',
+                                'text-5 font-bold border-b border-neutral-200 pb-0 print:break-after-avoid',
                                 locale === 'zh_tw' && 'tracking-wider',
                             ]"
                         >
@@ -235,10 +246,10 @@
                         </template>
 
                         <template v-if="section.key === 'work'">
-                            <ul class="space-y-8 list-none">
+                            <ul class="space-y-4 list-none">
                                 <li
                                     v-for="work in resume.work.slice(0, 3)"
-                                    class="space-y-2"
+                                    class="space-y-2 print:break-inside-avoid"
                                 >
                                     <div>
                                         <p
@@ -248,7 +259,7 @@
                                             {{ work.endDate }}
                                         </p>
                                         <div
-                                            class="flex gap-x-4 flex-col md:flex-row"
+                                            class="flex gap-x-4 flex-col md:flex-row print:flex-row"
                                         >
                                             <h3 class="font-bold">
                                                 {{ work.name }}
@@ -276,7 +287,7 @@
                             <ul class="space-y-4">
                                 <li
                                     v-for="project in resume.projects"
-                                    class="space-y-1"
+                                    class="space-y-1 print:break-inside-avoid"
                                 >
                                     <h3 class="font-bold">
                                         {{ project.name }}
@@ -374,14 +385,4 @@ const sideSections = computed(() => {
         },
     ]
 })
-
-const elPrintContainer = useTemplateRef("print")
-
-const { screenShot } = useResumePdf()
-
-function onClickDownloadPdf() {
-    if (elPrintContainer.value) {
-        screenShot({ element: elPrintContainer, margin: 50 })
-    }
-}
 </script>
