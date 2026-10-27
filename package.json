@@ -26,7 +26,7 @@
         "animejs": "^4.0.1",
         "eslint": "^9.24.0",
         "h3": "^1.15.11",
-        "nuxt": "^3.16.2",
+        "nuxt": "^4.6.3",
         "nuxt-gtag": "^3.0.2",
         "nuxt-og-image": "^6.10.4",
         "nuxt-schema-org": "^5.0.5",
