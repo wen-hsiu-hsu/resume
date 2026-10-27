@@ -16,7 +16,7 @@
     "resume": {
         "title": "履歷",
         "description": "我是一名專注於前端技術的工程師，歡迎來到我的履歷頁面！這裡是我在職場上的經歷、專案和技能的總結。如果你對我的背景和能力感興趣，請隨時聯繫我！",
-        "downloadPdf": "下載 PDF"
+        "viewPdf": "查看 PDF"
     },
     "mouseEvent": {
         "openLink": "開啟\n連結",

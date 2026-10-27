@@ -43,10 +43,14 @@
                 <a
                     class="flex gap-1 items-center hover:underline"
                     :href="`/resume-${locale}.pdf`"
-                    download
+                    target="_blank"
                 >
-                    <span>{{ $t("resume.downloadPdf") }}</span>
-                    <Icon name="mdi:download" class="size-3" mode="svg" />
+                    <span>{{ $t("resume.viewPdf") }}</span>
+                    <Icon
+                        name="mdi:arrow-top-right"
+                        class="size-3"
+                        mode="svg"
+                    />
                 </a>
             </div>
         </div>
