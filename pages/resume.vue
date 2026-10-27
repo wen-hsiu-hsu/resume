@@ -327,7 +327,7 @@ useHead({
     ],
 })
 
-defineOgImageComponent("NuxtSeo", {
+defineOgImage("Resume", {
     title: t("resume.title"),
     description: t("resume.description"),
 })

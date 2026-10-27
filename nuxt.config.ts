@@ -37,8 +37,8 @@ export default defineNuxtConfig({
         },
     },
 
-    ogImage: {
-        fonts: ["Noto+Serif+TC:400"],
+    fonts: {
+        families: [{ name: "Noto Serif TC", weights: [400], global: true }],
     },
 
     site: {
@@ -88,7 +88,6 @@ export default defineNuxtConfig({
 
     modules: [
         "@nuxt/eslint",
-        "@nuxt/image",
         "@nuxt/fonts",
         "@nuxt/icon",
         "@nuxt/scripts",

@@ -58,7 +58,7 @@ useHead({
     meta: [{ name: "description", content: currentSummary }],
 })
 
-defineOgImageComponent("NuxtSeo", {
+defineOgImage("Resume", {
     title: t("home.ogTitle"),
     description: currentSummary,
 })

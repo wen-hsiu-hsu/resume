@@ -25,9 +25,8 @@ useSeoMeta({
     ogDescription: currentBasics,
 })
 
-defineOgImageComponent("NuxtSeo", {
+defineOgImage("Resume", {
     siteName: "許文修 | Hsu Wen-Hsiu | 個人網站",
     theme: "#222",
-    colorMode: "dark",
 })
 </script>
