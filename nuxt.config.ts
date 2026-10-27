@@ -76,6 +76,7 @@ export default defineNuxtConfig({
             { code: "en", name: "English", file: "en.json" },
             { code: "zh_tw", name: "中文", file: "zh_tw.json" },
         ],
+        bundle: { optimizeTranslationDirective: false },
     },
 
     routeRules: {
