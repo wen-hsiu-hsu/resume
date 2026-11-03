@@ -1,24 +1,7 @@
 import type { ResumeState } from "@/types/state"
-import type { Icon } from "@/types/resume"
-
-type Gist = {
-    files: {
-        "resume_en.json": {
-            content: string
-        }
-        "resume_zh_TW.json": {
-            content: string
-        }
-        "icon.json": {
-            content: string
-        }
-    }
-}
+import type { Icon, Resume } from "@/types/resume"
 
 export default defineNuxtPlugin(async (nuxtApp) => {
-    const runtimeConfig = useRuntimeConfig()
-    const { gistId } = runtimeConfig.public.resume
-
     const iconState = useState<Icon>("icon", () => ({}))
 
     const resumeState = useState<ResumeState>("resume", () => ({
@@ -26,10 +9,15 @@ export default defineNuxtPlugin(async (nuxtApp) => {
         zh_tw: null,
     }))
 
-    const { data, error } = await useAsyncData<Gist>(
+    const { data, error } = await useAsyncData(
         "resume",
         async () => {
-            return await $fetch(`/api/github/gists/${gistId}`)
+            const [en, zh_tw, icon] = await Promise.all([
+                $fetch<Resume>("/api/resume-data/resume_en.json"),
+                $fetch<Resume>("/api/resume-data/resume_zh_TW.json"),
+                $fetch<Icon>("/api/resume-data/icon.json"),
+            ])
+            return { en, zh_tw, icon }
         },
         {
             getCachedData: (key) => {
@@ -47,13 +35,9 @@ export default defineNuxtPlugin(async (nuxtApp) => {
     )
 
     if (data.value) {
-        resumeState.value.en = JSON.parse(
-            data.value.files["resume_en.json"].content,
-        )
-        resumeState.value.zh_tw = JSON.parse(
-            data.value.files["resume_zh_TW.json"].content,
-        )
-        iconState.value = JSON.parse(data.value.files["icon.json"].content)
+        resumeState.value.en = data.value.en
+        resumeState.value.zh_tw = data.value.zh_tw
+        iconState.value = data.value.icon
     } else {
         console.error("Failed to fetch resume data.", error)
     }

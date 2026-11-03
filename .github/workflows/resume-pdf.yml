@@ -1,6 +1,7 @@
 name: Resume PDF
 
-# Gist 沒有 webhook，所以每天檢查一次版本，有更新才重新產生 PDF 並 commit，
+# 履歷資料在 wen-hsiu-hsu/resume-data（public repo，GitHub Pages 提供 JSON）。
+# 每天檢查一次該 repo main 的 commit，有更新才重新產生 PDF 並 commit，
 # push 之後由 Vercel 自動部署
 on:
     schedule:
@@ -11,8 +12,7 @@ permissions:
     contents: write
 
 env:
-    GIST_ID: b5a572372312fe91f0f36721e9d15007 # 與 nuxt.config.ts 的 gistId 相同
-    VERSION_FILE: .github/resume-pdf-gist-version
+    VERSION_FILE: .github/resume-pdf-data-version
 
 jobs:
     generate:
@@ -21,13 +21,13 @@ jobs:
         steps:
             - uses: actions/checkout@v4
 
-            # GITHUB_TOKEN 是 GitHub App 的 token，不能存取 gists API（會回 403），
-            # 而這個 gist 知道 ID 就能讀，所以直接不帶認證呼叫
-            - name: Check gist version
-              id: gist
+            # resume-data 是 public repo，git ls-remote 不需要認證
+            - name: Check data version
+              id: data
               run: |
                   set -o pipefail
-                  version=$(curl -fsSL --retry 3 "https://api.github.com/gists/$GIST_ID" | jq -r '.history[0].version')
+                  version=$(git ls-remote https://github.com/wen-hsiu-hsu/resume-data.git refs/heads/main | cut -f1)
+                  [ -n "$version" ]
                   echo "version=$version" >> "$GITHUB_OUTPUT"
                   if [ "$version" = "$(cat "$VERSION_FILE" 2>/dev/null)" ] && [ "${{ github.event_name }}" != "workflow_dispatch" ]; then
                       echo "changed=false" >> "$GITHUB_OUTPUT"
@@ -36,19 +36,19 @@ jobs:
                   fi
 
             - uses: actions/setup-node@v4
-              if: steps.gist.outputs.changed == 'true'
+              if: steps.data.outputs.changed == 'true'
               with:
                   node-version-file: .tool-versions
                   cache: npm
 
             - name: Build
-              if: steps.gist.outputs.changed == 'true'
+              if: steps.data.outputs.changed == 'true'
               run: |
                   npm ci
                   npm run build
 
             - name: Generate PDF
-              if: steps.gist.outputs.changed == 'true'
+              if: steps.data.outputs.changed == 'true'
               env:
                   CHROME_PATH: /usr/bin/google-chrome
               run: |
@@ -57,9 +57,9 @@ jobs:
                   node scripts/generate-pdf.mjs
 
             - name: Commit
-              if: steps.gist.outputs.changed == 'true'
+              if: steps.data.outputs.changed == 'true'
               run: |
-                  echo "${{ steps.gist.outputs.version }}" > "$VERSION_FILE"
+                  echo "${{ steps.data.outputs.version }}" > "$VERSION_FILE"
                   git config user.name "github-actions[bot]"
                   git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
                   git add public/resume-*.pdf "$VERSION_FILE"
