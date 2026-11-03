@@ -18,7 +18,7 @@
 
 用 Nuxt 3（Vue 3 + TypeScript）開發，樣式用 UnoCSS。
 
--   履歷資料放在 GitHub Gist，網站執行時讀取
+-   履歷資料放在 [resume-data](https://github.com/wen-hsiu-hsu/resume-data)，網站執行時讀取
 -   中英雙語用 @nuxtjs/i18n
 -   捲動動畫用 Anime.js
 -   PDF 由 GitHub Actions 用 headless Chrome 預先產生，文字可以選取

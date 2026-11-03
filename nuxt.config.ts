@@ -62,14 +62,6 @@ export default defineNuxtConfig({
         }),
     },
 
-    runtimeConfig: {
-        public: {
-            resume: {
-                gistId: "b5a572372312fe91f0f36721e9d15007",
-            },
-        },
-    },
-
     i18n: {
         defaultLocale: "zh_tw",
         locales: [
@@ -80,7 +72,11 @@ export default defineNuxtConfig({
     },
 
     routeRules: {
-        "/api/github/**": { proxy: "https://api.github.com/**", swr: 60 * 10 },
+        // 履歷資料來源：github.com/wen-hsiu-hsu/resume-data（GitHub Pages）
+        "/api/resume-data/**": {
+            proxy: "https://d.resume.hsiu.soy/data/**",
+            swr: 60 * 10,
+        },
     },
 
     gtag: {

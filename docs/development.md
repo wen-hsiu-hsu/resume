@@ -27,7 +27,7 @@ npm run generate  # 產生靜態網站
 
 `public/resume-{locale}-full.pdf` 是用 headless Chrome 把 `/resume`、`/en/resume` 印出來的完整版（可雙面列印），`public/resume-{locale}.pdf` 只取其第 1 頁，供網站下載與投遞；版面由頁面上的 `print:` 樣式和 `assets/index.css` 的 `@page` 決定。
 
-GitHub Actions（`.github/workflows/resume-pdf.yml`）每天檢查一次 Gist 版本，跟 `.github/resume-pdf-gist-version` 不同就重新 build、產生 PDF 並 commit，push 之後由 Vercel 部署。手動觸發 workflow 會跳過版本檢查、直接重產。
+GitHub Actions（`.github/workflows/resume-pdf.yml`）每天檢查一次 resume-data repo `main` 的 commit，跟 `.github/resume-pdf-data-version` 不同就重新 build、產生 PDF 並 commit，push 之後由 Vercel 部署。手動觸發 workflow 會跳過版本檢查、直接重產。
 
 本機重產：
 
@@ -66,17 +66,18 @@ resume/
 
 ### 履歷資料來源
 
-履歷資料放在 GitHub Gist，執行時透過 API 讀取。Gist ID 在 `nuxt.config.ts`：
+履歷資料放在 [wen-hsiu-hsu/resume-data](https://github.com/wen-hsiu-hsu/resume-data)（JSON Resume 格式），由 GitHub Pages 以 `https://d.resume.hsiu.soy/data/*.json` 提供。網站透過 `nuxt.config.ts` 的 route rule 代理讀取，快取 10 分鐘：
 
 ```typescript
-runtimeConfig: {
-    public: {
-        resume: {
-            gistId: "your-gist-id-here",
-        },
+routeRules: {
+    "/api/resume-data/**": {
+        proxy: "https://d.resume.hsiu.soy/data/**",
+        swr: 60 * 10,
     },
 },
 ```
+
+`plugins/resume.ts` 讀取 `/api/resume-data/` 下的 `resume_en.json`、`resume_zh_TW.json`、`icon.json`。
 
 ### 語系
 
